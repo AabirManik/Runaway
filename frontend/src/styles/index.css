@@ -1,0 +1,756 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Runway theme tokens
+   Brand values live here only — change them without restyling
+   components (FRONTEND.md → "keep brand values configurable").
+------------------------------------------------------------------- */
+@theme {
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-canvas: #f6f3ec;
+  --color-canvas-2: #fbfaf6;
+  --color-canvas-3: #efeade;
+
+  --color-ink: #171512;
+  --color-ink-2: #3a362f;
+  --color-muted: #6b675e; /* 5.1:1 on canvas — safe for body copy */
+  --color-muted-2: #918c82; /* decorative / large only */
+
+  --color-line: #e4dfd3;
+  --color-line-2: #efebe1;
+
+  --color-accent: #ddf26a; /* chartreuse */
+  --color-accent-2: #c9e452;
+  --color-sage: #c7deb4; /* footer band */
+  --color-sage-2: #dfeddb;
+
+  --color-coral: #f0a79a;
+  --color-sky: #cfe0f2;
+  --color-lilac: #e3d5f2;
+  --color-amber: #f5d06a;
+
+  --radius-card: 18px;
+}
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-padding-top: 96px; /* sticky nav clearance for #anchor links */
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+/* skip link — hidden until keyboard-focused */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  transform: translateY(-160%);
+  background: var(--color-ink);
+  color: #fff;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* focus target for the skip link — a ring around the whole page would be
+   jarring; focus continues into the section on the next Tab press */
+#main:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Layout
+   Wide on purpose: the hero is a full-bleed composition, so a narrow
+   container would leave a dead band down both sides of a large monitor.
+------------------------------------------------------------------- */
+.shell {
+  width: min(1680px, calc(100% - 80px));
+  margin-inline: auto;
+}
+
+@media (max-width: 1023px) {
+  .shell {
+    width: calc(100% - 64px);
+  }
+}
+
+@media (max-width: 767px) {
+  .shell {
+    width: calc(100% - 32px);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Type helpers
+------------------------------------------------------------------- */
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.display em {
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.lede {
+  color: var(--color-muted);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------
+   Buttons
+   Declared in the components layer so utility classes (hidden, w-full,
+   sm:inline-flex, …) still win over them — utilities live in a later
+   layer than components.
+------------------------------------------------------------------- */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.9rem 1.4rem;
+    white-space: nowrap;
+    transition:
+      transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      box-shadow 0.22s ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+    .btn:active {
+      transform: none;
+    }
+  }
+
+  .btn-dark {
+    background: var(--color-ink);
+    color: #fff;
+    box-shadow: 0 10px 24px -14px rgba(23, 21, 18, 0.9);
+  }
+
+  .btn-dark:hover {
+    background: #2a2621;
+  }
+
+  .btn-light {
+    background: #fff;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+  }
+
+  .btn-light:hover {
+    border-color: #cdc6b5;
+    background: #fff;
+  }
+
+  .btn-quiet {
+    background: transparent;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+  }
+
+  .btn-quiet:hover {
+    background: rgba(23, 21, 18, 0.04);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Scroll reveal — transform/opacity only, never changes layout
+------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ------------------------------------------------------------------
+   Hero carousel
+   Outer .hero-slot owns slot position + enter/exit travel.
+   Inner .hero-float owns the continuous independent drift.
+   Two layers so neither animation fights the other.
+------------------------------------------------------------------- */
+.hero-showcase {
+  position: relative;
+}
+
+/* Stage geometry is derived, not hand-tuned:
+
+     --pw   width of the photograph, as a share of the stage width
+     height aspect-ratio 1 / (0.7871 * --pw/100)
+
+   0.7871 comes from the asset itself: the cut has to land on canvas row
+   ~1010 because at row 1040 her right shoulder meets the photo's own edge
+   (x=1023) and would show as a hard vertical slice. Row 1010 is just past
+   the shoulder spread, so the bottom edge reads as an editorial crop.
+
+   JS only reads --lx/--rx to derive --gap. */
+.hero-stage {
+  position: relative;
+  aspect-ratio: 1 / 0.4723; /* 0.7871 * 0.60 */
+  overflow: hidden; /* the torso bleeds past this edge — never the canvas edge */
+  --pw: 60%;
+  --lx: 0%;
+  --rx: 70%;
+  /* fluid so the two cards never collide or clip on a 320px screen */
+  --w: min(108px, 29vw - 6px);
+  --gap: 0px;
+  outline-offset: 6px;
+}
+
+.hero-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden; /* clips cards as they enter/leave the stage */
+  pointer-events: none;
+}
+
+.hero-cards > * {
+  pointer-events: auto;
+}
+
+/* cards travel *behind* the portrait so the sweep reads as depth */
+.hero-portrait {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: var(--pw);
+  line-height: 0;
+  /* -13.2813% of the image's own height cancels the photograph's empty
+     transparent band (204px of a 1536px canvas), so her hair starts exactly
+     at the stage top instead of floating 13% down inside an invisible box. */
+  transform: translate(-50%, calc(-13.2813% + var(--parallax, 0px)));
+  will-change: transform;
+}
+
+.hero-portrait img {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+
+  /* Her torso dissolves into the page background instead of ending on a
+     hard horizontal cut. The fade is expressed against the photograph's own
+     height, and the stage's bottom edge always falls at 65.755% of that
+     height (see STAGE_BOTTOM_IN_IMAGE), so it lands exactly on the section
+     boundary at every breakpoint and portrait size. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 66%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 66%);
+}
+
+.hero-slot {
+  position: absolute;
+  left: var(--lx);
+  top: var(--y, 0%);
+  width: var(--w);
+  transition:
+    transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.68s ease;
+  transition-delay: var(--slot-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+/* row geometry (responsive — must live in CSS, not inline styles) */
+.hero-slot--top {
+  --y: 0%;
+  --gap-y: 0px;
+}
+
+.hero-slot--bottom {
+  --y: 55%;
+  --gap-y: -6px;
+  /* Two stacked cards need more stage height than a phone or small tablet
+     has to spare, so the second row only joins once there is real room. */
+  display: none;
+}
+
+/* Below this there is no room for a thumbnail or a paragraph beside her,
+   and a full card would run past the stage's bottom edge. What survives is
+   the icon + label — still readable, still the real card content. */
+@media (max-width: 767px) {
+  .hero-card {
+    padding: 10px;
+  }
+
+  .hero-card > :not(header),
+  .hero-card img {
+    display: none;
+  }
+}
+
+/* left anchor — the card's resting home */
+.hero-slot[data-state='left'] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotate(var(--rot, 0deg));
+}
+
+/* advanced one position across the stage */
+.hero-slot[data-state='right'] {
+  opacity: 1;
+  transform: translate3d(var(--gap), var(--gap-y), 0) rotate(var(--rot, 0deg));
+}
+
+/* exited to the left, fully transparent */
+.hero-slot[data-state='prev'] {
+  opacity: 0;
+  transform: translate3d(-135%, 0, 0) rotate(calc(var(--rot, 0deg) - 7deg));
+}
+
+/* parked off-stage right, fully transparent — ready to slide in */
+.hero-slot[data-state='next'] {
+  opacity: 0;
+  transform: translate3d(calc(var(--gap) + 135%), var(--gap-y), 0)
+    rotate(calc(var(--rot, 0deg) + 7deg));
+}
+
+/* ---- breakpoints ---- */
+@media (min-width: 600px) {
+  .hero-stage {
+    --lx: 5%;
+    --rx: 78%;
+    --w: 120px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-stage {
+    aspect-ratio: 1 / 0.433; /* 0.7871 * 0.55 */
+    --pw: 55%;
+    --lx: 3%;
+    --rx: 80%;
+    --w: 166px;
+  }
+
+  .hero-slot--top {
+    --y: 3%;
+    --gap-y: 24px;
+  }
+}
+
+/* Enough stage height for a second card under the first on the same side. */
+@media (min-width: 900px) {
+  .hero-slot--bottom {
+    display: block;
+    --y: 60%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-stage {
+    aspect-ratio: 1 / 0.448; /* 0.7871 * 0.57 */
+    --pw: 57%;
+    --lx: 4%;
+    --rx: 82%;
+    --w: 190px;
+  }
+
+  .hero-slot--bottom {
+    --y: 54%;
+  }
+}
+
+/* The shell is pinned at 1680 from here up, so give her the extra width
+   rather than spreading the cards further apart. */
+@media (min-width: 1388px) {
+  .hero-stage {
+    aspect-ratio: 1 / 0.456; /* 0.7871 * 0.58 */
+    --pw: 58%;
+  }
+}
+
+/* ---- orbit connectors ----
+   Four thin tethers drawn from each card's resting home toward the
+   silhouette. Geometry is written in JS from the measured stage so the
+   endpoint tracks her outline at every width. */
+.hero-links {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hero-links path {
+  fill: none;
+  stroke: #cfc8b6;
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.hero-links circle {
+  fill: #bdb5a1;
+}
+
+@media (max-width: 767px) {
+  .hero-links {
+    display: none;
+  }
+}
+
+.hero-float {
+  animation: hero-float var(--fdur, 12s) var(--fdel, 0s) ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translate3d(0, calc(var(--fdy, 8px) * -1), 0)
+      rotate(calc(var(--frot, 1deg) * -1));
+  }
+  50% {
+    transform: translate3d(0, var(--fdy, 8px), 0) rotate(var(--frot, 1deg));
+  }
+}
+
+/* pause decorative motion while the tab is hidden */
+html.is-hidden-motion .hero-float {
+  animation-play-state: paused;
+}
+
+.hero-card {
+  background: #fff;
+  border: 1px solid var(--color-line-2);
+  border-radius: 16px;
+  box-shadow: 0 22px 40px -26px rgba(40, 33, 18, 0.45);
+}
+
+/* ------------------------------------------------------------------
+   Paper plane flight (footer)
+------------------------------------------------------------------- */
+/* The plane rides its own wake. `offset-path` is set inline to the same
+   string the dotted trail draws, so the two can never separate at any
+   viewport width — a hand-tuned translate could only ever guess. */
+.plane {
+  offset-rotate: auto; /* nose follows the direction of travel */
+  offset-distance: 0%; /* parked at the wake's start between flights */
+  /* SVG <image>: resolve the rotation origin against the artwork box
+     itself, exactly as an HTML <img> would */
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  opacity: 1;
+  will-change: offset-distance, opacity;
+}
+
+.plane.is-flying {
+  animation: plane-fly var(--plane-dur, 4s) cubic-bezier(0.36, 0.06, 0.28, 1)
+    forwards;
+}
+
+/* Rest position == frame 0, so when the loop comes back round the plane is
+   simply there again — it returns on its own, not on a page reload. */
+@keyframes plane-fly {
+  0% {
+    offset-distance: 0%;
+    opacity: 1;
+  }
+  82% {
+    offset-distance: 86%;
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+/* The mask path draws the reveal along the path's own length, so the visible
+   path can keep its dotted dash pattern — a solid dasharray (the classic
+   stroke-dashoffset trick) is what turned this into a plain line. */
+.trail .trail-mask {
+  stroke-dasharray: var(--trail-len, 900);
+  stroke-dashoffset: var(--trail-len, 900);
+}
+
+/* The wake draws and dissipates INSIDE the flight window: the fade has to
+   start after the draw finishes and still complete before `is-drawing` is
+   dropped, or the trail is left hanging part-faded. Both are expressed as
+   shares of --plane-dur so they stay correct if the flight is retimed. */
+.trail.is-drawing .trail-mask {
+  animation: trail-draw calc(var(--plane-dur, 4s) * 0.6)
+    cubic-bezier(0.36, 0.06, 0.28, 1) forwards;
+}
+
+/* fade only the dots — the plane now lives inside this same <svg> */
+.trail.is-drawing .trail-dots {
+  animation: trail-fade calc(var(--plane-dur, 4s) * 0.25) ease
+    calc(var(--plane-dur, 4s) * 0.68) forwards;
+}
+
+@keyframes trail-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes trail-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------
+   FAQ accordion — grid 0fr→1fr, no JS height math, no layout jank
+------------------------------------------------------------------- */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.is-open .faq-panel {
+  grid-template-rows: 1fr;
+}
+
+.faq-panel > div {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faq-body {
+  opacity: 0;
+  transition: opacity 0.28s ease 0.06s;
+}
+
+.is-open .faq-body {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------
+   Dotted footer wordmark — background-clip:text
+------------------------------------------------------------------- */
+.wordmark-dotted {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: transparent;
+  background-image: radial-gradient(
+    circle at center,
+    rgba(23, 21, 18, 0.42) 1.4px,
+    transparent 1.6px
+  );
+  background-size: 8px 8px;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* underline scribble used under accent words */
+.scribble {
+  position: relative;
+  display: inline-block;
+  isolation: isolate; /* keeps the highlight behind the text, not the page */
+}
+
+.scribble::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 0.06em;
+  height: 0.34em;
+  background: var(--color-accent);
+  border-radius: 999px;
+  z-index: -1;
+  transform: skewX(-8deg) rotate(-0.6deg);
+}
+
+/* ------------------------------------------------------------------
+   Integrations — dashed connector between a generic tile and the mockup
+------------------------------------------------------------------- */
+.integration-tile .connector {
+  display: none;
+  position: absolute;
+  top: 50%;
+  height: 0;
+  width: 30px;
+  border-top: 1.6px dashed var(--color-line);
+}
+
+.integration-tile .connector::after {
+  content: '';
+  position: absolute;
+  top: -3.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-line);
+}
+
+.integration-tile--left .connector {
+  left: 100%;
+}
+
+.integration-tile--left .connector::after {
+  right: -3px;
+}
+
+.integration-tile--right .connector {
+  right: 100%;
+}
+
+.integration-tile--right .connector::after {
+  left: -3px;
+}
+
+@media (min-width: 1024px) {
+  .integration-tile .connector {
+    display: block;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Decorative helpers
+------------------------------------------------------------------- */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: radial-gradient(
+      rgba(23, 21, 18, 0.055) 1px,
+      transparent 1px
+    );
+  background-size: 3px 3px;
+}
+
+/* soft ambient shadow-leaf decoration behind product mockups */
+.ambient {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.5;
+  filter: blur(26px);
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion — calm static composition, no continuous movement
+------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-float {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .hero-slot {
+    transition: none !important;
+  }
+
+  .plane {
+    animation: none !important;
+    /* parked a third of the way along a fully drawn wake: one still scene */
+    offset-distance: 32% !important;
+    opacity: 1 !important;
+  }
+
+  .trail path {
+    stroke-dashoffset: 0 !important;
+    opacity: 1;
+    animation: none !important;
+  }
+
+  .trail,
+  .trail.is-drawing {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .faq-panel,
+  .faq-body {
+    transition: none !important;
+  }
+}

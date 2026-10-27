@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#171512" />
+  <!-- converging runway stripes in perspective -->
+  <path d="M14 54 L28.5 14 h7 L50 54 h-8.5 L32 26 22.5 54 Z" fill="#f6f3ec" />
+  <!-- centre dashes -->
+  <path d="M31.4 46 h1.2 l.5-4 h-2.2 Z M30.6 36 h2.8 l.6-4.5 h-4 Z M30 27 h4 l.7-5 h-5.4 Z" fill="#f6f3ec" opacity=".65" />
+  <!-- accent horizon dot -->
+  <circle cx="32" cy="12.5" r="5" fill="#ddf26a" />
+</svg>
